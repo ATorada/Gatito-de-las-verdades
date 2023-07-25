@@ -183,7 +183,7 @@ function mostrarCorazones(event) {
     corazon.classList.add('corazon');
     corazon.style.left = `${x}px`;
     corazon.style.top = `${y}px`;
-    let listaCorazones = ["💖", "💗", "💓", "💕", "💞", "💘"];
+    let listaCorazones = ["💖", "💗", "💓", "💕", "💞", "💘", "🖤", "💜"];
     corazon.innerHTML = listaCorazones[Math.floor(Math.random() * listaCorazones.length)];
     const size = Math.random() * 35 + 15;
     corazon.style.width = `${size}px`;
