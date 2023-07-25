@@ -58,7 +58,6 @@ audio.volume = 0.1;
 /* Gestor de volumen */
 volumen.addEventListener("input", function () {
     musica.volume = volumen.value;
-    console.log(volumen.value);
 });
 
 /* Funcionamiento del botón de play */
