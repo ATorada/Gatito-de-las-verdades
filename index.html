@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>✨ Gatito de las verdades ✨</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script
+    src="https://kit.fontawesome.com/5e3bcd1429.js"
+    crossorigin="anonymous"
+    ></script>
+</head>
+
+<body>
+    <div id="corazones" class="hidden"></div>
+    <audio id="musica">
+        <source src="music/ghibli_vibes.mp3" type="audio/mpeg">
+    </audio>
+    <span id="icono"><i>Ghibli fantasy</i> ☔</span>
+    <div id="botones">
+        <span onclick="cambiarCancion('anterior')" id="anterior">
+            <i class="fas fa-backward"></i>
+        </span>
+        <span id="play">
+            <i class="fas fa-play"></i>
+        </span>
+        <span onclick="cambiarCancion('siguiente')" id="siguiente">
+            <i class="fas fa-forward"></i>
+        </span>
+    </div>
+    <input type="range" id="volumen" min="0" max="0.1" step="0.01" value="0.1">
+    <br>
+
+    <div id="registro">
+        <span style="opacity: 0;"></span>
+    </div>
+    <br>
+    <div class="container">
+        <img id="gatito" src="img/gato_jugando.gif" alt="Gatito">
+    </div>
+</div>
+    <br>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

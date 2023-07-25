@@ -1,0 +1,175 @@
+/* General */
+
+* {
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #ecdcf0;
+    animation: fondo 5s infinite linear;
+}
+
+
+/* IDs */
+
+#registro {
+    position: relative;
+}
+
+#registro span {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    color: #000000;
+    background-color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: opacity 1s ease-in-out;
+}
+
+#botones {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+#volumen {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+#play,
+#anterior,
+#siguiente {
+    font-size: 50px;
+    margin-top: 20px;
+    color: black;
+    cursor: pointer;
+}
+
+#anterior:active,
+#siguiente:active {
+    transform: scale(0.9);
+}
+
+#play:hover,
+#anterior:hover,
+#siguiente:hover {
+    color: #e1cbe7;
+    transform: scale(1.1);
+}
+
+#gatito {
+    transition: opacity 1s ease-in-out;
+}
+
+#icono {
+    font-size: 40px;
+    color: black;
+    transition: opacity 1s ease-in-out;
+}
+
+
+/* Clases */
+
+.container {
+    position: relative;
+    padding: 10px;
+    height: 300px;
+    width: 300px;
+    box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: girar 5s infinite linear;
+}
+
+.corazon {
+    position: absolute;
+    animation: corazon 2s infinite linear;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out; 
+}
+
+.hidden {
+    display: hidden;
+}
+
+
+/* Animaciones */
+
+@keyframes fondo {
+    0% {
+        background: #c1abe7;
+    }
+
+    25% {
+        background: #b397e1;
+    }
+
+    50% {
+        background: #a483dc;
+    }
+
+    75% {
+        background: #b397e1;
+    }
+
+    100% {
+        background: #c1abe7;
+    }
+
+}
+
+@keyframes girar {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes corazon {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    25% {
+        font-size: 25px;
+        transform: scale(1.5) rotate(360deg);
+    }
+
+    50% {
+        font-size: 50px;
+        transform: scale(2) rotate(720deg);
+    }
+
+    100% {
+        font-size: 25px;
+        transform: scale(1) rotate(0deg);
+    }
+}
