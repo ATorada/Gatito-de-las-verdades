@@ -193,7 +193,7 @@ window.addEventListener("load", function () {
     if (segundos < 10) {
         segundos = "0" + segundos;
     }
-    document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
+    //document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
     if (document.cookie && !cookieCargada) {
         let cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
