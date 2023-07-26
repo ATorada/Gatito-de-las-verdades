@@ -155,12 +155,6 @@ window.addEventListener("load", function () {
         }
     }
     cookieCargada = true;
-    minutos = Math.floor(musica.duration / 60);
-    segundos = Math.floor(musica.duration % 60);
-    if (segundos < 10) {
-        segundos = "0" + segundos;
-    }
-    document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
 });
 
 
