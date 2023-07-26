@@ -171,6 +171,7 @@ function cambiarCancion(direccion, cookie) {
             segundos = "0" + segundos;
         }
         document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
+        document.getElementById("info").style.animation = "fadein 2s forwards";
     }, 500);
 }
 
