@@ -171,6 +171,17 @@ function cambiarCancion(direccion, cookie) {
             segundos = "0" + segundos;
         }
         document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
+        if (isNaN(musica.duration) || isNaN(musica.currentTime)) {
+            if (canciones[cancionActual] === "music/ghibli_vibes.mp3") {
+                document.getElementById("duracion").innerHTML = "41:03";
+            } else if (canciones[cancionActual] === "music/summer_vibes.mp3") {
+                document.getElementById("duracion").innerHTML = "31:08";
+            } else if (canciones[cancionActual] === "music/lofi.mp3") {
+                document.getElementById("duracion").innerHTML = "55:54";
+            } else if (canciones[cancionActual] === "music/cafe_vibes.mp3") {
+                document.getElementById("duracion").innerHTML = "39:21";
+            }
+        }
         document.getElementById("info").style.animation = "fadein 2s forwards";
     }, 1000);
 }
