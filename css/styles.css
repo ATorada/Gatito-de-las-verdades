@@ -93,6 +93,9 @@ body {
     transition: opacity 1s ease-in-out;
 }
 
+#progreso {
+    width: 20%;
+}
 
 /* Clases */
 
