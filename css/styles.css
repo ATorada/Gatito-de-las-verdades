@@ -70,6 +70,7 @@ input[type="range"]::-moz-range-thumb {
 
 #registro {
     position: relative;
+    display: table;
 }
 
 #registro span {
@@ -84,6 +85,9 @@ input[type="range"]::-moz-range-thumb {
     border-radius: 10px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     transition: opacity 1s ease-in-out;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 #botones {
@@ -112,7 +116,6 @@ input[type="range"]::-moz-range-thumb {
 
 #info {
     opacity: 0;
-    animation: fadein 2s forwards;
 }
 
 #play,
@@ -153,6 +156,7 @@ input[type="range"]::-moz-range-thumb {
     opacity: 0;
     animation: fadein 2s forwards;
     margin-bottom: 20px;
+    transition: width 1s ease-in-out;
 }
 
 #sonido {
@@ -173,6 +177,7 @@ input[type="range"]::-moz-range-thumb {
     animation: fadein 2s forwards;
     z-index: 1;
 }
+
 
 /* Clases */
 
@@ -286,5 +291,20 @@ input[type="range"]::-moz-range-thumb {
     100% {
         font-size: 25px;
         transform: scale(1) rotate(0deg);
+    }
+}
+
+
+/* Media Queries */
+
+@media (max-width: 600px) {
+    #progreso {
+        width: 90%;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1500px) {
+    #progreso {
+        width: 500px;
     }
 }
