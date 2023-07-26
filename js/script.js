@@ -172,7 +172,7 @@ function cambiarCancion(direccion, cookie) {
         }
         document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
         document.getElementById("info").style.animation = "fadein 2s forwards";
-    }, 500);
+    }, 1000);
 }
 
 /* Permite cargar la canción que estabas escuchando */
