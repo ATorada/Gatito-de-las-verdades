@@ -28,13 +28,16 @@
             <i class="fas fa-forward"></i>
         </span>
     </div>
-    <input type="range" id="volumen" min="0" max="0.1" step="0.01" value="0.1">
+    <div id="sonido">
+        <i id="sonidoIcono" class="fas fa-volume-high"></i>
+        <input type="range" id="volumen" min="0" max="0.1" step="0.01" value="0.1">
+    </div>
     <br>
-    <div>
-        <i><span id="tiempo">0:00</span>
-        /
-        <span id="duracion">0:00</span>
-        </i>
+    <div id="info">
+        <i><b><span id="tiempo">0:00</span>
+                /
+                <span id="duracion">0:00</span>
+            </b></i>
     </div>
     <input type="range" id="progreso" step="0.1" value="0">
     <div id="registro">
@@ -44,7 +47,7 @@
     <div class="container">
         <img id="gatito" src="img/gato_jugando.gif" alt="Gatito">
     </div>
-</div>
+    </div>
     <br>
     <script src="js/script.js"></script>
 </body>
