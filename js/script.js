@@ -131,7 +131,7 @@ function cambiarCancion(direccion, cookie) {
             segundos = "0" + segundos;
         }
         document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
-    }, 200);
+    }, 1000);
 }
 
 let cookieCargada = false;
