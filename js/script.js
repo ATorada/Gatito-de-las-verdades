@@ -8,8 +8,13 @@ const play = document.getElementById("play");
 const volumen = document.getElementById("volumen");
 const container = document.getElementsByClassName('container')[0];
 const audio = document.getElementById("musica");
+const fecha = new Date(new Date().setDate(new Date().getDate() + 7)).toUTCString();
+let antesDeMute = 0;
 let timeout = null;
 let cancionActual = 0;
+let cookieCargada = false;
+let cambiandoDuracion = false;
+
 
 /* Lista de canciones */
 const canciones = [
@@ -56,27 +61,64 @@ const cumplidos = [
 audio.volume = 0.1;
 
 /* Gestor de volumen */
+
+/* Permite cambiar el icono del volumen de manera dinámica */
+function cambiarIconoVolumen() {
+    if (volumen.value == 0) {
+        document.getElementById("sonidoIcono").classList.remove("fa-volume-high");
+        document.getElementById("sonidoIcono").classList.remove("fa-volume-low");
+        document.getElementById("sonidoIcono").classList.add("fa-volume-xmark");
+    } else if (volumen.value < 0.07) {
+        document.getElementById("sonidoIcono").classList.remove("fa-volume-high");
+        document.getElementById("sonidoIcono").classList.remove("fa-volume-xmark");
+        document.getElementById("sonidoIcono").classList.add("fa-volume-low");
+    } else {
+        document.getElementById("sonidoIcono").classList.remove("fa-volume-low");
+        document.getElementById("sonidoIcono").classList.remove("fa-volume-xmark");
+        document.getElementById("sonidoIcono").classList.add("fa-volume-high");
+    }
+}
+
+/* Si existe la cookie de volumen modifica volumen para tener ese value */
+window.onload = function () {
+    if (document.cookie) {
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            if (cookies[i].includes("volumen")) {
+                volumen.value = cookies[i].split("=")[1];
+                musica.volume = volumen.value;
+                cambiarIconoVolumen();
+            }
+        }
+    }
+}
+
+/* Modifica el volumen en tiempo real */
 volumen.addEventListener("input", function () {
+    antesDeMute = volumen.value;
     musica.volume = volumen.value;
+    cambiarIconoVolumen();
+    document.cookie = "volumen=" + volumen.value + "; expires=" + fecha + "; path=/";
 });
 
-/* Funcionamiento del botón de play */
-play.addEventListener("click", function () {
-    if (audio.paused) {
-        audio.play();
-        this.children[0].classList.remove("fa-play");
-        this.children[0].classList.add("fa-pause");
+/* Permite mutear o desmutear */
+document.getElementById("sonidoIcono").addEventListener("click", function () {
+    if (volumen.value != 0) {
+        antesDeMute = volumen.value;
+        volumen.value = 0;
+        musica.volume = volumen.value;
+        cambiarIconoVolumen();
+        document.cookie = "volumen=" + volumen.value + "; expires=" + fecha + "; path=/";
     } else {
-        audio.pause();
-        this.children[0].classList.remove("fa-pause");
-        this.children[0].classList.add("fa-play");
+        volumen.value = antesDeMute;
+        musica.volume = volumen.value;
+        cambiarIconoVolumen();
+        document.cookie = "volumen=" + volumen.value + "; expires=" + fecha + "; path=/";
     }
 });
 
-/* Reproducción de la siguiente pista al acabar la actual */
-musica.addEventListener("ended", function () {
-    cambiarCancion("siguiente");
-});
+
+/*~~~~~~ Apartado del control de la pista ~~~~~~*/
 
 /* Empieza a reproducir la canción actual */
 function reproducirCancionActual() {
@@ -86,8 +128,7 @@ function reproducirCancionActual() {
 
 /* Permite cambiar la canción  */
 function cambiarCancion(direccion, cookie) {
-
-    if(!cookie) {
+    if (!cookie) {
         cancionActual = parseInt(cancionActual);
         if (direccion === "anterior") {
             cancionActual = (cancionActual - 1 + canciones.length) % canciones.length;
@@ -116,25 +157,24 @@ function cambiarCancion(direccion, cookie) {
     } else {
         musica.src = canciones[cancionActual];
     }
-
     setTimeout(() => {
         document.getElementById("progreso").max = musica.duration;
-        if(!cookie){
+        if (!cookie) {
             document.getElementById("progreso").value = 0;
         } else {
             document.getElementById("progreso").value = musica.currentTime;
         }
-    
+
         let minutos = Math.floor(musica.duration / 60);
         let segundos = Math.floor(musica.duration % 60);
         if (segundos < 10) {
             segundos = "0" + segundos;
         }
         document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
-    }, 1000);
+    }, 100);
 }
 
-let cookieCargada = false;
+/* Permite cargar la canción que estabas escuchando */
 window.addEventListener("load", function () {
     let minutos = Math.floor(musica.duration / 60);
     let segundos = Math.floor(musica.duration % 60);
@@ -142,7 +182,6 @@ window.addEventListener("load", function () {
         segundos = "0" + segundos;
     }
     document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
-    /* Si tiene las cookies pone la canción que tenia en ese momento */
     if (document.cookie && !cookieCargada) {
         let cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
@@ -153,14 +192,20 @@ window.addEventListener("load", function () {
             }
             cambiarCancion("siguiente", true);
         }
+    } else {
+        cancionActual = 0;
+        cambiarCancion("siguiente", true);
     }
     cookieCargada = true;
 });
 
+/* Al cargar la página se establece la duración de la página */
+window.addEventListener("load", function () {
+    document.getElementById("progreso").max = musica.duration;
+    document.getElementById("progreso").min = 0;
+});
 
 /* Se encarga de la barra de progreso */
-
-let cambiandoDuracion = false;
 musica.addEventListener("timeupdate", function () {
     if (!cambiandoDuracion) {
         const progreso = (musica.currentTime);
@@ -176,15 +221,44 @@ musica.addEventListener("timeupdate", function () {
         }
         document.getElementById("tiempo").innerHTML = minutos + ":" + segundos;
     }
-    document.cookie = "track=" + cancionActual + "; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=/";
-    document.cookie = "tiempo=" + musica.currentTime + "; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=/";
+    document.cookie = "track=" + cancionActual + "; expires=" + fecha + "; path=/";
+    document.cookie = "tiempo=" + musica.currentTime + "; expires=" + fecha + "; path=/";
 
 });
 
-document.getElementById("progreso").addEventListener("change", function () {
+/* Reproducción de la siguiente pista al acabar la actual */
+musica.addEventListener("ended", function () {
+    cambiarCancion("siguiente");
+});
+
+/* Funcionamiento del botón de play */
+play.addEventListener("click", function () {
+    if (audio.paused) {
+        audio.play();
+        this.children[0].classList.remove("fa-play");
+        this.children[0].classList.add("fa-pause");
+    } else {
+        audio.pause();
+        this.children[0].classList.remove("fa-pause");
+        this.children[0].classList.add("fa-play");
+    }
+});
+
+/* Permite o bloquea que se cambie el progreso de la canción */
+document.addEventListener("mousedown", function () {
+    cambiandoDuracion = true;
+});
+
+document.addEventListener("mouseup", function () {
+    cambiandoDuracion = false;
+});
+
+/* Permite cambiar el momento de la canción en tiempo real */
+document.getElementById("progreso").addEventListener("input", function () {
     musica.currentTime = (this.value);
 });
 
+/* Permite cambiar el tiempo de la canción en tiempo real */
 document.getElementById("progreso").addEventListener("input", function () {
     let minutos = Math.floor(this.value / 60);
     let segundos = Math.floor(this.value % 60);
@@ -194,19 +268,6 @@ document.getElementById("progreso").addEventListener("input", function () {
     document.getElementById("tiempo").innerHTML = minutos + ":" + segundos;
 });
 
-
-document.addEventListener("mousedown", function () {
-    cambiandoDuracion = true;
-});
-
-document.addEventListener("mouseup", function () {
-    cambiandoDuracion = false;
-});
-
-window.addEventListener("load", function () {
-    document.getElementById("progreso").max = musica.duration;
-    document.getElementById("progreso").min = 0;
-});
 
 /*~~~~~~ Apartado de cumplidos ~~~~~~*/
 
@@ -248,7 +309,7 @@ function crearTimeout() {
         setTimeout(() => {
             gatito.src = "img/gato_jugando.gif";
             gatito.style.opacity = 1;
-            container.style.animation = "girar 5s infinite linear";
+            container.style.animation = "girar 5s infinite linear , fondoGatito 5s infinite linear";
             corazones.style.opacity = 0;
         }, 1000);
         /* Oculta los corazones y los cumplidos */
@@ -285,7 +346,7 @@ function mostrarCorazones(event) {
     corazon.style.width = `${size}px`;
     corazones.appendChild(corazon);
 
-
+    corazon.style.zIndex = 1000;
     corazon.style.opacity = 0.7;
     corazon.style.display = "absolute";
     corazon.style.left = `${x + Math.random() * 100 - 50}px`;
@@ -312,13 +373,12 @@ function mostrarCorazones(event) {
 gatito.addEventListener('click', () => {
     if (corazones.classList.contains('hidden')) {
         corazones.classList.remove('hidden');
-        /* Cambia la imagen con un blur */
         gatito.style.opacity = 0;
         setTimeout(() => {
             gatito.src = "img/gato_feliz.gif";
             gatito.style.opacity = 1;
             corazones.style.opacity = 1;
-            container.style.animation = "none";
+            container.style.animation = "fondoGatito 5s infinite linear";
         }, 1000);
     }
 

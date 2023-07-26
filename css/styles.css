@@ -1,4 +1,6 @@
 /* General */
+@import url("https://fonts.googleapis.com/css2?family=Archivo&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@600&family=Rye&display=swap");
 
 * {
     user-select: none;
@@ -19,6 +21,48 @@ body {
     margin: 0;
     background-color: #ecdcf0;
     animation: fondo 5s infinite linear;
+    font-family: "Archivo", sans-serif;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 15px;
+    background: #f8e2ff;
+    border-radius: 16px;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 15px;
+    background: #f8e2ff;
+    border-radius: 16px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    background-color: #f8e2ff;
+    border-radius: 50%;
+    border: 2px solid #c898ff;
+    box-shadow: -407px 0 0 400px #d5b2fc;
+}
+
+input[type="range"]::-moz-range-thumb {
+    height: 15px;
+    width: 15px;
+    background-color: #f8e2ff;
+    border-radius: 50%;
+    border: 1px solid #c898ff;
+    box-shadow: -407px 0 0 400px #d5b2fc;
 }
 
 
@@ -48,18 +92,27 @@ body {
     gap: 50px;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    animation: fadein 2s forwards;
 }
 
 #volumen {
     -webkit-appearance: none;
     appearance: none;
-    height: 10px;
+    height: 15px;
     border-radius: 5px;
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    opacity: 0;
+    animation: fadein 2s forwards;
+}
+
+#info {
+    opacity: 0;
+    animation: fadein 2s forwards;
 }
 
 #play,
@@ -78,8 +131,9 @@ body {
 
 #play:hover,
 #anterior:hover,
-#siguiente:hover {
-    color: #e1cbe7;
+#siguiente:hover,
+#sonidoIcono:hover {
+    color: #f8e2ff;
     transform: scale(1.1);
 }
 
@@ -90,11 +144,34 @@ body {
 #icono {
     font-size: 40px;
     color: black;
+    opacity: 0;
     transition: opacity 1s ease-in-out;
 }
 
 #progreso {
     width: 20%;
+    opacity: 0;
+    animation: fadein 2s forwards;
+    margin-bottom: 20px;
+}
+
+#sonido {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    animation: fadein 2s forwards;
+}
+
+#sonidoIcono {
+    color: rgb(57, 36, 71);
+    cursor: pointer;
+}
+
+#corazones {
+    animation: fadein 2s forwards;
+    z-index: 1;
 }
 
 /* Clases */
@@ -107,13 +184,15 @@ body {
     box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.5);
     border-radius: 50%;
     animation: girar 5s infinite linear;
+    animation: fondoGatito 5s infinite linear;
+    cursor: cell;
 }
 
 .corazon {
     position: absolute;
     animation: corazon 2s infinite linear;
     pointer-events: none;
-    transition: opacity 1s ease-in-out; 
+    transition: opacity 1s ease-in-out;
 }
 
 .hidden {
@@ -123,25 +202,58 @@ body {
 
 /* Animaciones */
 
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes fondo {
     0% {
-        background: #c1abe7;
+        background: #b59edd;
     }
 
     25% {
-        background: #b397e1;
+        background: #a688d6;
     }
 
     50% {
-        background: #a483dc;
+        background: #9674cf;
     }
 
     75% {
-        background: #b397e1;
+        background: #a688d6;
     }
 
     100% {
-        background: #c1abe7;
+        background: #b59edd;
+    }
+
+}
+
+@keyframes fondoGatito {
+    0% {
+        background: #ccb8f0;
+    }
+
+    25% {
+        background: #c1a6ec;
+    }
+
+    50% {
+        background: #b091e4;
+    }
+
+    75% {
+        background: #c1a6ec;
+    }
+
+    100% {
+        background: #ccb8f0;
     }
 
 }
