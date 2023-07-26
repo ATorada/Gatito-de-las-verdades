@@ -85,14 +85,15 @@ function reproducirCancionActual() {
 }
 
 /* Permite cambiar la canción  */
-function cambiarCancion(direccion) {
-    play.children[0].classList.remove("fa-play");
-    play.children[0].classList.add("fa-pause");
+function cambiarCancion(direccion, cookie) {
 
-    if (direccion === "anterior") {
-        cancionActual = (cancionActual - 1 + canciones.length) % canciones.length;
-    } else if (direccion === "siguiente") {
-        cancionActual = (cancionActual + 1) % canciones.length;
+    if(!cookie) {
+        cancionActual = parseInt(cancionActual);
+        if (direccion === "anterior") {
+            cancionActual = (cancionActual - 1 + canciones.length) % canciones.length;
+        } else if (direccion === "siguiente") {
+            cancionActual = (cancionActual + 1) % canciones.length;
+        }
     }
     document.getElementById("icono").style.opacity = 0;
     setTimeout(() => {
@@ -108,9 +109,104 @@ function cambiarCancion(direccion) {
         document.getElementById("icono").style.opacity = 1;
     }, 1000);
 
-    reproducirCancionActual();
+    if (!cookie) {
+        reproducirCancionActual();
+        play.children[0].classList.remove("fa-play");
+        play.children[0].classList.add("fa-pause");
+    } else {
+        musica.src = canciones[cancionActual];
+    }
+
+    setTimeout(() => {
+        document.getElementById("progreso").max = musica.duration;
+        if(!cookie){
+            document.getElementById("progreso").value = 0;
+        } else {
+            document.getElementById("progreso").value = musica.currentTime;
+        }
+    
+        let minutos = Math.floor(musica.duration / 60);
+        let segundos = Math.floor(musica.duration % 60);
+        if (segundos < 10) {
+            segundos = "0" + segundos;
+        }
+        document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
+    }, 100);
 }
 
+let cookieCargada = false;
+window.addEventListener("load", function () {
+    let minutos = Math.floor(musica.duration / 60);
+    let segundos = Math.floor(musica.duration % 60);
+    if (segundos < 10) {
+        segundos = "0" + segundos;
+    }
+    document.getElementById("duracion").innerHTML = minutos + ":" + segundos;
+    /* Si tiene las cookies pone la canción que tenia en ese momento */
+    if (document.cookie && !cookieCargada) {
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            if (cookies[i].includes("track")) {
+                cancionActual = cookies[i].split("=")[1];
+            } else if (cookies[i].includes("tiempo")) {
+                musica.currentTime = cookies[i].split("=")[1];
+            }
+            cambiarCancion("siguiente", true);
+        }
+    }
+    cookieCargada = true;
+});
+
+
+/* Se encarga de la barra de progreso */
+
+let cambiandoDuracion = false;
+musica.addEventListener("timeupdate", function () {
+    if (!cambiandoDuracion) {
+        const progreso = (musica.currentTime);
+        document.getElementById("progreso").value = progreso;
+        document.getElementById("progreso").max = musica.duration;
+        let minutos = Math.floor(musica.currentTime / 60);
+        let segundos = Math.floor(musica.currentTime % 60);
+        if (segundos < 10) {
+            segundos = "0" + segundos;
+        }
+        if (minutos + ":" + segundos === document.getElementById("duracion").innerHTML) {
+            cambiarCancion("siguiente");
+        }
+        document.getElementById("tiempo").innerHTML = minutos + ":" + segundos;
+    }
+    document.cookie = "track=" + cancionActual + "; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=/";
+    document.cookie = "tiempo=" + musica.currentTime + "; expires=Thu, 18 Dec 2023 12:00:00 UTC; path=/";
+
+});
+
+document.getElementById("progreso").addEventListener("change", function () {
+    musica.currentTime = (this.value);
+});
+
+document.getElementById("progreso").addEventListener("input", function () {
+    let minutos = Math.floor(this.value / 60);
+    let segundos = Math.floor(this.value % 60);
+    if (segundos < 10) {
+        segundos = "0" + segundos;
+    }
+    document.getElementById("tiempo").innerHTML = minutos + ":" + segundos;
+});
+
+
+document.addEventListener("mousedown", function () {
+    cambiandoDuracion = true;
+});
+
+document.addEventListener("mouseup", function () {
+    cambiandoDuracion = false;
+});
+
+window.addEventListener("load", function () {
+    document.getElementById("progreso").max = musica.duration;
+    document.getElementById("progreso").min = 0;
+});
 
 /*~~~~~~ Apartado de cumplidos ~~~~~~*/
 
